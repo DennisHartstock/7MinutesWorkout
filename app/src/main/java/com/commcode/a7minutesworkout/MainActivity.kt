@@ -1,7 +1,7 @@
 package com.commcode.a7minutesworkout
 
+import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.commcode.a7minutesworkout.databinding.ActivityMainBinding
 
@@ -15,7 +15,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(view)
 
         binding.flStart.setOnClickListener {
-            Toast.makeText(this, "Start clicked", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, ExerciseActivity::class.java)
+            startActivity(intent)
         }
     }
 }
