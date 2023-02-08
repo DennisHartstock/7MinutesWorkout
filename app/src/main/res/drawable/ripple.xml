@@ -7,6 +7,6 @@
         </shape>
     </item>
 
-    <item android:drawable="@drawable/circle_border" />
+    <item android:drawable="@drawable/border_circle" />
 
 </ripple>
