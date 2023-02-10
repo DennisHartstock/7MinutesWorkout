@@ -11,8 +11,10 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 class ExerciseActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityExerciseBinding
-    private lateinit var restTimer: CountDownTimer
+    private var restTimer: CountDownTimer? = null
+    private var exerciseTimer: CountDownTimer? = null
     private var restProgress = 0
+    private var exerciseProgress = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +37,8 @@ class ExerciseActivity : AppCompatActivity() {
             .setTitle("Warning")
             .setMessage("Do you really go back? It will abort the workout")
             .setPositiveButton("Yes") { _, _ ->
+                restTimer?.cancel()
+                exerciseTimer?.cancel()
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
             }
@@ -42,11 +46,37 @@ class ExerciseActivity : AppCompatActivity() {
             .show()
     }
 
+    private fun setExerciseProgressBar() {
+        binding.pbExercise.progress = exerciseProgress
+        exerciseTimer = object : CountDownTimer(30_000, 100) {
+            override fun onTick(millisUntilFinished: Long) {
+                exerciseProgress++
+                binding.tvExercise.text = getString(R.string.tv_exercise)
+                binding.pbExercise.max = 30
+                binding.pbExercise.progress = (millisUntilFinished / 1_000).toInt()
+                binding.tvTimer.text = (millisUntilFinished / 1_000).toString()
+            }
+
+            override fun onFinish() {
+                Toast.makeText(
+                    this@ExerciseActivity,
+                    "Start the rest",
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
+                setRestProgressBar()
+            }
+
+        }.start()
+    }
+
     private fun setRestProgressBar() {
         binding.pbExercise.progress = restProgress
         restTimer = object : CountDownTimer(10_000, 100) {
             override fun onTick(millisUntilFinished: Long) {
                 restProgress++
+                binding.tvExercise.text = getString(R.string.tv_rest)
+                binding.pbExercise.max = 10
                 binding.pbExercise.progress = (millisUntilFinished / 1_000).toInt()
                 binding.tvTimer.text = (millisUntilFinished / 1_000).toString()
             }
@@ -58,6 +88,7 @@ class ExerciseActivity : AppCompatActivity() {
                     Toast.LENGTH_SHORT
                 )
                     .show()
+                setExerciseProgressBar()
             }
 
         }.start()
@@ -65,7 +96,9 @@ class ExerciseActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        restTimer.cancel()
+        restTimer?.cancel()
+        exerciseTimer?.cancel()
         restProgress = 0
+        exerciseProgress = 0
     }
 }
