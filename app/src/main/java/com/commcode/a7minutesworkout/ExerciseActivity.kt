@@ -3,7 +3,7 @@ package com.commcode.a7minutesworkout
 import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.widget.Toast
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.commcode.a7minutesworkout.databinding.ActivityExerciseBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -15,6 +15,8 @@ class ExerciseActivity : AppCompatActivity() {
     private var exerciseTimer: CountDownTimer? = null
     private var restProgress = 0
     private var exerciseProgress = 0
+    private lateinit var exerciseList: ArrayList<Exercise>
+    private var currentExercise = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,6 +25,7 @@ class ExerciseActivity : AppCompatActivity() {
         setContentView(view)
         setSupportActionBar(binding.tbExercise)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        exerciseList = Constants.defaultExerciseList()
         binding.tbExercise.setNavigationOnClickListener { endWorkoutDialog() }
         setRestProgressBar()
     }
@@ -51,19 +54,20 @@ class ExerciseActivity : AppCompatActivity() {
         exerciseTimer = object : CountDownTimer(30_000, 100) {
             override fun onTick(millisUntilFinished: Long) {
                 exerciseProgress++
-                binding.tvExercise.text = getString(R.string.tv_exercise)
+                binding.ivExercise.setImageResource(exerciseList[currentExercise].image)
+                binding.ivExercise.visibility = View.VISIBLE
+                binding.tvExercise.text = buildString {
+                    append("DO ")
+                    append(exerciseList[currentExercise].name)
+                    append(" FOR")
+                }
                 binding.pbExercise.max = 30
                 binding.pbExercise.progress = (millisUntilFinished / 1_000).toInt()
                 binding.tvTimer.text = (millisUntilFinished / 1_000).toString()
             }
 
             override fun onFinish() {
-                Toast.makeText(
-                    this@ExerciseActivity,
-                    "Start the rest",
-                    Toast.LENGTH_SHORT
-                )
-                    .show()
+                currentExercise++
                 setRestProgressBar()
             }
 
@@ -75,6 +79,7 @@ class ExerciseActivity : AppCompatActivity() {
         restTimer = object : CountDownTimer(10_000, 100) {
             override fun onTick(millisUntilFinished: Long) {
                 restProgress++
+                binding.ivExercise.visibility = View.INVISIBLE
                 binding.tvExercise.text = getString(R.string.tv_rest)
                 binding.pbExercise.max = 10
                 binding.pbExercise.progress = (millisUntilFinished / 1_000).toInt()
@@ -82,13 +87,11 @@ class ExerciseActivity : AppCompatActivity() {
             }
 
             override fun onFinish() {
-                Toast.makeText(
-                    this@ExerciseActivity,
-                    "Start the exercise",
-                    Toast.LENGTH_SHORT
-                )
-                    .show()
-                setExerciseProgressBar()
+                if (currentExercise < exerciseList.size) {
+                    setExerciseProgressBar()
+                } else {
+                    binding.tvExercise.text = getString(R.string.cogratulations)
+                }
             }
 
         }.start()

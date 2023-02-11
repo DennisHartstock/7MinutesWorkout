@@ -2,5 +2,6 @@
     <string name="app_name">7 Minutes Workout</string>
     <string name="start">START</string>
     <string name="tv_rest">GET READY FOR</string>
-    <string name="tv_exercise">DO THE EXERCISE FOR</string>
+    <string name="exercise_image">Exercise image</string>
+    <string name="cogratulations">Congratulations! You have completed the workout</string>
 </resources>
