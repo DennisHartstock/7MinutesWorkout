@@ -3,14 +3,17 @@ package com.commcode.a7minutesworkout
 import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.speech.tts.TextToSpeech
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.commcode.a7minutesworkout.databinding.ActivityExerciseBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import java.util.*
 
 class ExerciseActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityExerciseBinding
+    private var textToSpeech: TextToSpeech? = null
     private var restTimer: CountDownTimer? = null
     private var exerciseTimer: CountDownTimer? = null
     private var restProgress = 0
@@ -28,6 +31,18 @@ class ExerciseActivity : AppCompatActivity() {
         exerciseList = Constants.defaultExerciseList()
         binding.tbExercise.setNavigationOnClickListener { endWorkoutDialog() }
         setRestProgressBar()
+
+        textToSpeech = TextToSpeech(this) { status ->
+            run {
+                if (status != TextToSpeech.ERROR) {
+                    textToSpeech?.language = Locale.US
+                }
+            }
+        }
+    }
+
+    private fun speakOut(text: String) {
+        textToSpeech?.speak(text, TextToSpeech.QUEUE_ADD, null, null)
     }
 
     @Deprecated("Deprecated in Java")
@@ -50,17 +65,19 @@ class ExerciseActivity : AppCompatActivity() {
     }
 
     private fun setExerciseProgressBar() {
+        val text = buildString {
+            append("DO ")
+            append(exerciseList[currentExercise].name)
+            append(" FOR")
+        }
+        speakOut(text)
         binding.pbExercise.progress = exerciseProgress
         exerciseTimer = object : CountDownTimer(30_000, 100) {
             override fun onTick(millisUntilFinished: Long) {
                 exerciseProgress++
                 binding.ivExercise.setImageResource(exerciseList[currentExercise].image)
                 binding.ivExercise.visibility = View.VISIBLE
-                binding.tvExercise.text = buildString {
-                    append("DO ")
-                    append(exerciseList[currentExercise].name)
-                    append(" FOR")
-                }
+                binding.tvExercise.text = text
                 binding.pbExercise.max = 30
                 binding.pbExercise.progress = (millisUntilFinished / 1_000).toInt()
                 binding.tvTimer.text = (millisUntilFinished / 1_000).toString()
@@ -72,7 +89,9 @@ class ExerciseActivity : AppCompatActivity() {
                     setRestProgressBar()
                 } else {
                     binding.ivExercise.visibility = View.INVISIBLE
-                    binding.tvExercise.text = getString(R.string.cogratulations)
+                    val congratulations = getString(R.string.congratulations)
+                    speakOut(congratulations)
+                    binding.tvExercise.text = congratulations
                 }
             }
 
@@ -80,15 +99,17 @@ class ExerciseActivity : AppCompatActivity() {
     }
 
     private fun setRestProgressBar() {
+        val text = buildString {
+            append("GET READY FOR ")
+            append(exerciseList[currentExercise].name)
+        }
+        speakOut(text)
         binding.pbExercise.progress = restProgress
         restTimer = object : CountDownTimer(10_000, 100) {
             override fun onTick(millisUntilFinished: Long) {
                 restProgress++
                 binding.ivExercise.visibility = View.INVISIBLE
-                binding.tvExercise.text = buildString {
-                    append("GET READY FOR ")
-                    append(exerciseList[currentExercise].name)
-                }
+                binding.tvExercise.text = text
                 binding.pbExercise.max = 10
                 binding.pbExercise.progress = (millisUntilFinished / 1_000).toInt()
                 binding.tvTimer.text = (millisUntilFinished / 1_000).toString()
@@ -107,5 +128,7 @@ class ExerciseActivity : AppCompatActivity() {
         exerciseTimer?.cancel()
         restProgress = 0
         exerciseProgress = 0
+        textToSpeech?.stop()
+        textToSpeech?.shutdown()
     }
 }

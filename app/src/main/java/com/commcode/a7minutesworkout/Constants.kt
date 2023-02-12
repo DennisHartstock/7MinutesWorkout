@@ -13,7 +13,7 @@ object Constants {
         )
         val pushUps = Exercise(
             2,
-            "PUSH-UPS",
+            "PUSH UPS",
             R.drawable.ic_push_up,
             isSelected = false,
             isCompleted = false
