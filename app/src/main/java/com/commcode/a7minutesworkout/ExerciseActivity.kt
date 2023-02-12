@@ -68,7 +68,12 @@ class ExerciseActivity : AppCompatActivity() {
 
             override fun onFinish() {
                 currentExercise++
-                setRestProgressBar()
+                if (currentExercise < exerciseList.size) {
+                    setRestProgressBar()
+                } else {
+                    binding.ivExercise.visibility = View.INVISIBLE
+                    binding.tvExercise.text = getString(R.string.cogratulations)
+                }
             }
 
         }.start()
@@ -80,18 +85,17 @@ class ExerciseActivity : AppCompatActivity() {
             override fun onTick(millisUntilFinished: Long) {
                 restProgress++
                 binding.ivExercise.visibility = View.INVISIBLE
-                binding.tvExercise.text = getString(R.string.tv_rest)
+                binding.tvExercise.text = buildString {
+                    append("GET READY FOR ")
+                    append(exerciseList[currentExercise].name)
+                }
                 binding.pbExercise.max = 10
                 binding.pbExercise.progress = (millisUntilFinished / 1_000).toInt()
                 binding.tvTimer.text = (millisUntilFinished / 1_000).toString()
             }
 
             override fun onFinish() {
-                if (currentExercise < exerciseList.size) {
                     setExerciseProgressBar()
-                } else {
-                    binding.tvExercise.text = getString(R.string.cogratulations)
-                }
             }
 
         }.start()
