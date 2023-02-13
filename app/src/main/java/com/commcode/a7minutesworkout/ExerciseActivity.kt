@@ -1,6 +1,7 @@
 package com.commcode.a7minutesworkout
 
 import android.content.Intent
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.speech.tts.TextToSpeech
@@ -20,6 +21,8 @@ class ExerciseActivity : AppCompatActivity() {
     private var exerciseProgress = 0
     private lateinit var exerciseList: ArrayList<Exercise>
     private var currentExercise = 0
+    private lateinit var restPlayer: MediaPlayer
+    private lateinit var exercisePlayer: MediaPlayer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -93,6 +96,12 @@ class ExerciseActivity : AppCompatActivity() {
                     speakOut(congratulations)
                     binding.tvExercise.text = congratulations
                 }
+                try {
+                    exercisePlayer = MediaPlayer.create(applicationContext, R.raw.tick)
+                    exercisePlayer.start()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
             }
 
         }.start()
@@ -116,7 +125,13 @@ class ExerciseActivity : AppCompatActivity() {
             }
 
             override fun onFinish() {
-                    setExerciseProgressBar()
+                setExerciseProgressBar()
+                try {
+                    restPlayer = MediaPlayer.create(applicationContext, R.raw.start)
+                    restPlayer.start()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
             }
 
         }.start()
@@ -130,5 +145,7 @@ class ExerciseActivity : AppCompatActivity() {
         exerciseProgress = 0
         textToSpeech?.stop()
         textToSpeech?.shutdown()
+        exercisePlayer.stop()
+        restPlayer.stop()
     }
 }
