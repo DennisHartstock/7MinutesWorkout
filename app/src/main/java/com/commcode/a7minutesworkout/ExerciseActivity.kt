@@ -23,6 +23,7 @@ class ExerciseActivity : AppCompatActivity() {
     private var currentExercise = 0
     private lateinit var restPlayer: MediaPlayer
     private lateinit var exercisePlayer: MediaPlayer
+    private lateinit var exerciseAdapter: ExerciseAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +36,8 @@ class ExerciseActivity : AppCompatActivity() {
         binding.tbExercise.setNavigationOnClickListener { endWorkoutDialog() }
         setRestProgressBar()
 
+        setupExerciseRecyclerView()
+
         textToSpeech = TextToSpeech(this) { status ->
             run {
                 if (status != TextToSpeech.ERROR) {
@@ -42,6 +45,11 @@ class ExerciseActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun setupExerciseRecyclerView() {
+        exerciseAdapter = ExerciseAdapter(exerciseList)
+        binding.rvExercises.adapter = exerciseAdapter
     }
 
     private fun speakOut(text: String) {
