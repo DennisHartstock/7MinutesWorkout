@@ -7,21 +7,21 @@ object Constants {
         val squats = Exercise(
             1,
             "SQUATS",
-            R.drawable.ic_squat,
+            image = R.drawable.ic_squat,
             isSelected = false,
             isCompleted = false
         )
         val pushUps = Exercise(
             2,
             "PUSH UPS",
-            R.drawable.ic_push_up,
+            image = R.drawable.ic_push_up,
             isSelected = false,
             isCompleted = false
         )
         val plank = Exercise(
             3,
             "PLANK",
-            R.drawable.ic_plank,
+            image = R.drawable.ic_plank,
             isSelected = false,
             isCompleted = false
         )

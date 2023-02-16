@@ -34,8 +34,8 @@ class ExerciseActivity : AppCompatActivity() {
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         exerciseList = Constants.defaultExerciseList()
         binding.tbExercise.setNavigationOnClickListener { endWorkoutDialog() }
-        setRestProgressBar()
 
+        setRestProgressBar()
         setupExerciseRecyclerView()
 
         textToSpeech = TextToSpeech(this) { status ->
@@ -95,6 +95,8 @@ class ExerciseActivity : AppCompatActivity() {
             }
 
             override fun onFinish() {
+                exerciseList[currentExercise].isSelected = false
+                exerciseList[currentExercise].isCompleted = true
                 currentExercise++
                 if (currentExercise < exerciseList.size) {
                     setRestProgressBar()
@@ -110,6 +112,7 @@ class ExerciseActivity : AppCompatActivity() {
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
+                exerciseAdapter.notifyDataSetChanged()
             }
 
         }.start()
@@ -133,6 +136,7 @@ class ExerciseActivity : AppCompatActivity() {
             }
 
             override fun onFinish() {
+                exerciseList[currentExercise].isSelected = true
                 setExerciseProgressBar()
                 try {
                     restPlayer = MediaPlayer.create(applicationContext, R.raw.start)
@@ -140,6 +144,7 @@ class ExerciseActivity : AppCompatActivity() {
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
+                exerciseAdapter.notifyDataSetChanged()
             }
 
         }.start()
