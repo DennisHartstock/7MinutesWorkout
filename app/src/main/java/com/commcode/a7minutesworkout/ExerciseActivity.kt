@@ -17,6 +17,8 @@ class ExerciseActivity : AppCompatActivity() {
     private var textToSpeech: TextToSpeech? = null
     private var restTimer: CountDownTimer? = null
     private var exerciseTimer: CountDownTimer? = null
+    private var restTimerDurationInSeconds: Long = 10
+    private var exerciseTimerDurationInSeconds: Long = 30
     private var restProgress = 0
     private var exerciseProgress = 0
     private lateinit var exerciseList: ArrayList<Exercise>
@@ -83,7 +85,7 @@ class ExerciseActivity : AppCompatActivity() {
         }
         speakOut(text)
         binding.pbExercise.progress = exerciseProgress
-        exerciseTimer = object : CountDownTimer(30_000, 100) {
+        exerciseTimer = object : CountDownTimer(exerciseTimerDurationInSeconds * 1_000, 100) {
             override fun onTick(millisUntilFinished: Long) {
                 exerciseProgress++
                 binding.ivExercise.setImageResource(exerciseList[currentExercise].image)
@@ -100,11 +102,11 @@ class ExerciseActivity : AppCompatActivity() {
                 currentExercise++
                 if (currentExercise < exerciseList.size) {
                     setRestProgressBar()
+                    exerciseAdapter.notifyDataSetChanged()
                 } else {
-                    binding.ivExercise.visibility = View.INVISIBLE
-                    val congratulations = getString(R.string.congratulations)
-                    speakOut(congratulations)
-                    binding.tvExercise.text = congratulations
+                    finish()
+                    val intent = Intent(this@ExerciseActivity, FinishActivity::class.java)
+                    startActivity(intent)
                 }
                 try {
                     exercisePlayer = MediaPlayer.create(applicationContext, R.raw.tick)
@@ -112,7 +114,6 @@ class ExerciseActivity : AppCompatActivity() {
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
-                exerciseAdapter.notifyDataSetChanged()
             }
 
         }.start()
@@ -125,7 +126,7 @@ class ExerciseActivity : AppCompatActivity() {
         }
         speakOut(text)
         binding.pbExercise.progress = restProgress
-        restTimer = object : CountDownTimer(10_000, 100) {
+        restTimer = object : CountDownTimer(restTimerDurationInSeconds * 1_000, 100) {
             override fun onTick(millisUntilFinished: Long) {
                 restProgress++
                 binding.ivExercise.visibility = View.INVISIBLE
@@ -138,13 +139,13 @@ class ExerciseActivity : AppCompatActivity() {
             override fun onFinish() {
                 exerciseList[currentExercise].isSelected = true
                 setExerciseProgressBar()
+                exerciseAdapter.notifyDataSetChanged()
                 try {
                     restPlayer = MediaPlayer.create(applicationContext, R.raw.start)
                     restPlayer.start()
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
-                exerciseAdapter.notifyDataSetChanged()
             }
 
         }.start()
