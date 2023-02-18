@@ -35,7 +35,7 @@ class ExerciseActivity : AppCompatActivity() {
         setSupportActionBar(binding.tbExercise)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         exerciseList = Constants.defaultExerciseList()
-        binding.tbExercise.setNavigationOnClickListener { endWorkoutDialog() }
+        binding.tbExercise.setNavigationOnClickListener { cancelWorkoutDialog() }
 
         setRestProgressBar()
         setupExerciseRecyclerView()
@@ -60,13 +60,13 @@ class ExerciseActivity : AppCompatActivity() {
 
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
-        endWorkoutDialog()
+        cancelWorkoutDialog()
     }
 
-    private fun endWorkoutDialog() {
+    private fun cancelWorkoutDialog() {
         MaterialAlertDialogBuilder(this)
             .setTitle("Warning")
-            .setMessage("Do you really go back? It will abort the workout")
+            .setMessage("Do you really go back? It will cancel the workout")
             .setPositiveButton("Yes") { _, _ ->
                 restTimer?.cancel()
                 exerciseTimer?.cancel()
@@ -81,7 +81,6 @@ class ExerciseActivity : AppCompatActivity() {
         val text = buildString {
             append("DO ")
             append(exerciseList[currentExercise].name)
-            append(" FOR")
         }
         speakOut(text)
         binding.pbExercise.progress = exerciseProgress
@@ -100,19 +99,24 @@ class ExerciseActivity : AppCompatActivity() {
                 exerciseList[currentExercise].isSelected = false
                 exerciseList[currentExercise].isCompleted = true
                 currentExercise++
-                if (currentExercise < exerciseList.size) {
-                    setRestProgressBar()
-                    exerciseAdapter.notifyDataSetChanged()
-                } else {
-                    finish()
-                    val intent = Intent(this@ExerciseActivity, FinishActivity::class.java)
-                    startActivity(intent)
-                }
+
                 try {
                     exercisePlayer = MediaPlayer.create(applicationContext, R.raw.tick)
                     exercisePlayer.start()
                 } catch (e: Exception) {
                     e.printStackTrace()
+                }
+
+                if (currentExercise < exerciseList.size) {
+                    setRestProgressBar()
+                    exerciseAdapter.notifyDataSetChanged()
+                } else {
+                    val congratulations = getString(R.string.congratulations)
+                    speakOut(congratulations)
+                    Thread.sleep(2_000)
+                    finish()
+                    val intent = Intent(this@ExerciseActivity, FinishActivity::class.java)
+                    startActivity(intent)
                 }
             }
 

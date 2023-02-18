@@ -34,12 +34,6 @@ class FinishActivity : AppCompatActivity() {
             }
         }
 
-        val congratulations = getString(R.string.congratulations)
-        speakOut(congratulations)
-        binding.tvFinish.text = congratulations
-    }
-
-    private fun speakOut(text: String) {
-        textToSpeech?.speak(text, TextToSpeech.QUEUE_ADD, null, null)
+        binding.tvFinish.text = getString(R.string.congratulations)
     }
 }
