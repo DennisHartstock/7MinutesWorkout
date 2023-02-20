@@ -3,4 +3,5 @@
     <string name="start">START</string>
     <string name="exercise_image">Exercise image</string>
     <string name="congratulations">Congratulations! You have completed the workout</string>
+    <string name="menu_bmi_calculator">BMI Calculator</string>
 </resources>

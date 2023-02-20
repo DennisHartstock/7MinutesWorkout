@@ -33,7 +33,7 @@ class ExerciseActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
         setSupportActionBar(binding.tbExercise)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         exerciseList = Constants.defaultExerciseList()
         binding.tbExercise.setNavigationOnClickListener { cancelWorkoutDialog() }
 

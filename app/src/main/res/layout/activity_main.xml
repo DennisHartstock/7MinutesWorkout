@@ -3,17 +3,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:padding="@dimen/padding"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/tbStart"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:background="@color/white"
+        android:theme="@style/ToolbarTheme"
+        app:layout_constraintTop_toTopOf="parent"
+        app:titleTextColor="@color/purple_500" />
 
     <ImageView
         android:id="@+id/ivLogo"
         android:layout_width="match_parent"
         android:layout_height="250dp"
+        android:padding="@dimen/padding"
         android:src="@drawable/logo"
         app:layout_constraintBottom_toTopOf="@+id/flStart"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tbStart"
         tools:ignore="ContentDescription" />
 
     <FrameLayout
