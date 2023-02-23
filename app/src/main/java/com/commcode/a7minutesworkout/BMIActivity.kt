@@ -24,6 +24,10 @@ class BMIActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        binding.rgUnits.setOnCheckedChangeListener { _, checkedId ->
+            changeUnits(checkedId)
+        }
+
         binding.btnCalculate.setOnClickListener {
             if (!validateInputs()) {
                 Toast.makeText(this, "Enter valid data", Toast.LENGTH_SHORT).show()
@@ -34,6 +38,20 @@ class BMIActivity : AppCompatActivity() {
                 displayBMI(bmi)
             }
         }
+    }
+
+    private fun changeUnits(checkedId: Int) {
+        if (checkedId == R.id.rbMetricUnits) {
+            binding.tilHeight.hint = "Height in cm"
+            binding.tilWeight.hint = "Weight in kg"
+        }
+        if (checkedId == R.id.rbUsUnits) {
+            binding.tilHeight.hint = "Height in feet"
+            binding.tilWeight.hint = "Weight in pounds"
+        }
+        binding.etHeight.text?.clear()
+        binding.etWeight.text?.clear()
+        binding.llBMIResult.visibility = View.INVISIBLE
     }
 
     private fun displayBMI(bmi: Float) {

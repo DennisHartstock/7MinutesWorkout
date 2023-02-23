@@ -16,6 +16,44 @@
         app:title="Calculate BMI"
         app:titleTextColor="@color/purple_500" />
 
+    <RadioGroup
+        android:id="@+id/rgUnits"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/rg_bg"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/tbBMI">
+
+        <RadioButton
+            android:id="@+id/rbMetricUnits"
+            android:layout_width="0dp"
+            android:layout_height="36dp"
+            android:layout_weight="0.50"
+            android:background="@drawable/rg_unit"
+            android:button="@null"
+            android:checked="true"
+            android:gravity="center"
+            android:text="@string/rb_metric_units"
+            android:textColor="@drawable/rg_selector"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <RadioButton
+            android:id="@+id/rbUsUnits"
+            android:layout_width="0dp"
+            android:layout_height="36dp"
+            android:layout_weight="0.50"
+            android:background="@drawable/rg_unit"
+            android:button="@null"
+            android:checked="false"
+            android:gravity="center"
+            android:text="@string/rb_us_units"
+            android:textColor="@drawable/rg_selector"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+    </RadioGroup>
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tilHeight"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -24,7 +62,7 @@
         android:layout_margin="8dp"
         android:textColorHint="@color/purple_500"
         app:boxStrokeColor="@color/purple_500"
-        app:layout_constraintTop_toBottomOf="@id/tbBMI">
+        app:layout_constraintTop_toBottomOf="@id/rgUnits">
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/etHeight"
@@ -109,7 +147,7 @@
         android:id="@+id/btnCalculate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:text="@string/btn_calculate"
         android:textSize="@dimen/button_text_size"
         app:layout_constraintEnd_toEndOf="parent"
