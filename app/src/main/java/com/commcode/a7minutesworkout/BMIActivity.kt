@@ -6,10 +6,12 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.commcode.a7minutesworkout.databinding.ActivityBmiBinding
+import kotlin.math.pow
 
 class BMIActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityBmiBinding
+    private var currentUnitView: String = METRIC_UNITS_VIEW
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,24 +31,34 @@ class BMIActivity : AppCompatActivity() {
         }
 
         binding.btnCalculate.setOnClickListener {
-            if (!validateInputs()) {
-                Toast.makeText(this, "Enter valid data", Toast.LENGTH_SHORT).show()
+            calculateBMI()
+        }
+    }
+
+    private fun calculateBMI() {
+        if (!validateInputs()) {
+            Toast.makeText(this, "Enter valid data", Toast.LENGTH_SHORT).show()
+        } else {
+            val height = binding.etHeight.text.toString().toFloat()
+            val weight = binding.etWeight.text.toString().toFloat()
+            val bmi = if (currentUnitView == METRIC_UNITS_VIEW) {
+                (weight / height.pow(2)) * 10_000
             } else {
-                val height = binding.etHeight.text.toString().toFloat()
-                val weight = binding.etWeight.text.toString().toFloat()
-                val bmi = (weight / height / height) * 10_000
-                displayBMI(bmi)
+                (weight / height.pow(2)) * 703
             }
+            displayBMI(bmi)
         }
     }
 
     private fun changeUnits(checkedId: Int) {
         if (checkedId == R.id.rbMetricUnits) {
+            currentUnitView = METRIC_UNITS_VIEW
             binding.tilHeight.hint = "Height in cm"
             binding.tilWeight.hint = "Weight in kg"
         }
         if (checkedId == R.id.rbUsUnits) {
-            binding.tilHeight.hint = "Height in feet"
+            currentUnitView = US_UNITS_VIEW
+            binding.tilHeight.hint = "Height in inches"
             binding.tilWeight.hint = "Weight in pounds"
         }
         binding.etHeight.text?.clear()
@@ -102,5 +114,10 @@ class BMIActivity : AppCompatActivity() {
     private fun validateInputs(): Boolean {
         return (binding.etHeight.text.toString().isNotEmpty() && binding.etWeight.text.toString()
             .isNotEmpty())
+    }
+
+    companion object {
+        private const val METRIC_UNITS_VIEW = "METRIC_UNITS_VIEW"
+        private const val US_UNITS_VIEW = "US_UNITS_VIEW"
     }
 }
