@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("RestrictedApi")
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         if (menu is MenuBuilder) menu.setOptionalIconsVisible(true)
-        menuInflater.inflate(R.menu.bmi_calculator, menu)
+        menuInflater.inflate(R.menu.menu, menu)
         return true
     }
 
@@ -36,6 +36,10 @@ class MainActivity : AppCompatActivity() {
         val id = item.itemId
         if (id == R.id.menuItemBMI) {
             val intent = Intent(this, BMIActivity::class.java)
+            startActivity(intent)
+        }
+        if (id == R.id.menuItemHistory) {
+            val intent = Intent(this, HistoryActivity::class.java)
             startActivity(intent)
         }
         return super.onOptionsItemSelected(item)

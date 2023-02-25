@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menuItemHistory"
+        android:icon="@drawable/history_icon"
+        android:title="@string/menu_item_history" />
+
+    <item
+        android:id="@+id/menuItemBMI"
+        android:icon="@drawable/percent_icon"
+        android:title="@string/menu_item_bmi_calculator" />
+</menu>

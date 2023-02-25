@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <item
-        android:id="@+id/menuItemBMI"
-        android:icon="@drawable/bmi_icon"
-        android:title="@string/menu_bmi_calculator" />
-</menu>
