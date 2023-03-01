@@ -3,7 +3,6 @@ package com.commcode.a7minutesworkout
 import android.content.Intent
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.commcode.a7minutesworkout.databinding.ActivityFinishBinding
@@ -53,7 +52,6 @@ class FinishActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             historyDao.insert(HistoryEntity(date))
-            Log.i("date", "Date: $date")
         }
     }
 }

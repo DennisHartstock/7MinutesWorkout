@@ -11,4 +11,5 @@
     <string name="rb_metric_units">METRIC UNITS</string>
     <string name="rb_us_units">US UNITS</string>
     <string name="menu_item_history">History</string>
+    <string name="tv_no_data">No data available</string>
 </resources>

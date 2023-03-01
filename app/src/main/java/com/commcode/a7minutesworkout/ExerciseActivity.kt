@@ -17,8 +17,8 @@ class ExerciseActivity : AppCompatActivity() {
     private var textToSpeech: TextToSpeech? = null
     private var restTimer: CountDownTimer? = null
     private var exerciseTimer: CountDownTimer? = null
-    private var restTimerDurationInSeconds: Long = 10
-    private var exerciseTimerDurationInSeconds: Long = 30
+    private var restTimerDurationInSeconds: Long = 1
+    private var exerciseTimerDurationInSeconds: Long = 3
     private var restProgress = 0
     private var exerciseProgress = 0
     private lateinit var exerciseList: ArrayList<Exercise>
