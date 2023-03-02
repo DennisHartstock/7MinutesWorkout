@@ -17,8 +17,8 @@ class ExerciseActivity : AppCompatActivity() {
     private var textToSpeech: TextToSpeech? = null
     private var restTimer: CountDownTimer? = null
     private var exerciseTimer: CountDownTimer? = null
-    private var restTimerDurationInSeconds: Long = 1
-    private var exerciseTimerDurationInSeconds: Long = 3
+    private var restTimerDurationInSeconds: Long = 60
+    private var exerciseTimerDurationInSeconds: Long = 30
     private var restProgress = 0
     private var exerciseProgress = 0
     private lateinit var exerciseList: ArrayList<Exercise>
@@ -79,7 +79,7 @@ class ExerciseActivity : AppCompatActivity() {
 
     private fun setExerciseProgressBar() {
         val text = buildString {
-            append("DO ")
+            append("Do ")
             append(exerciseList[currentExercise].name)
         }
         speakOut(text)
@@ -90,7 +90,7 @@ class ExerciseActivity : AppCompatActivity() {
                 binding.ivExercise.setImageResource(exerciseList[currentExercise].image)
                 binding.ivExercise.visibility = View.VISIBLE
                 binding.tvExercise.text = text
-                binding.pbExercise.max = 30
+                binding.pbExercise.max = exerciseTimerDurationInSeconds.toInt()
                 binding.pbExercise.progress = (millisUntilFinished / 1_000).toInt()
                 binding.tvTimer.text = (millisUntilFinished / 1_000).toString()
             }
@@ -119,13 +119,12 @@ class ExerciseActivity : AppCompatActivity() {
                     startActivity(intent)
                 }
             }
-
         }.start()
     }
 
     private fun setRestProgressBar() {
         val text = buildString {
-            append("GET READY FOR ")
+            append("Get ready for ")
             append(exerciseList[currentExercise].name)
         }
         speakOut(text)
@@ -135,7 +134,7 @@ class ExerciseActivity : AppCompatActivity() {
                 restProgress++
                 binding.ivExercise.visibility = View.INVISIBLE
                 binding.tvExercise.text = text
-                binding.pbExercise.max = 10
+                binding.pbExercise.max = restTimerDurationInSeconds.toInt()
                 binding.pbExercise.progress = (millisUntilFinished / 1_000).toInt()
                 binding.tvTimer.text = (millisUntilFinished / 1_000).toString()
             }
